@@ -10,4 +10,6 @@ public interface RoleType {
 
     RoleCategory getCategory();
 
+    RoleTeam getTeam();
+
 }
