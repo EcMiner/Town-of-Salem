@@ -10,14 +10,12 @@ public abstract class Role {
     protected Player player;
     protected final List<RoleAttribute> attributes;
     protected final RoleType identifier;
-    protected final RoleTeam team;
     protected boolean isDead;
 
-    protected Role(Player player, RoleType identifier, RoleTeam team) {
+    protected Role(Player player, RoleType identifier) {
         this.player = player;
         this.attributes = new ArrayList<>();
         this.identifier = identifier;
-        this.team = team;
     }
 
     /**
@@ -65,16 +63,6 @@ public abstract class Role {
     }
 
     /**
-     * Get the {@link RoleTeam team} this role type belongs to (i.e. mayor belongs to town, godfather belongs to mafia)
-     *
-     * @return Returns the team this role belong to
-     * @see RoleTeam
-     */
-    public final RoleTeam getTeam() {
-        return team;
-    }
-
-    /**
      * Get the {@link Player player} who's using this role
      *
      * @return Returns the player who's using the role
@@ -89,7 +77,6 @@ public abstract class Role {
      * see {@link RoleAttributes RoleAttributes} for a description of the default attributes
      *
      * @param attribute The attribute you want to add
-     *
      * @see RoleAttribute
      * @see RoleAttributes
      */
@@ -103,7 +90,6 @@ public abstract class Role {
      * realization</p>
      *
      * @param role The role of the player who's trying to kill this player
-     *
      * @return Returns whether a player can kill this player
      */
     public boolean canGetKilled(Role role) {
