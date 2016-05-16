@@ -1,5 +1,5 @@
 package me.ecminer.tos.role.ability;
 
-public interface NightAbility {
+public interface NightAbility extends Ability {
 
 }
