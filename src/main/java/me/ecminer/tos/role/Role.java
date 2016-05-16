@@ -2,8 +2,7 @@ package me.ecminer.tos.role;
 
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public abstract class Role {
 
@@ -11,6 +10,7 @@ public abstract class Role {
     protected final List<RoleAttribute> attributes;
     protected final RoleType identifier;
     protected boolean isDead;
+    private final Map<String, RoleOption> options = new HashMap<>();
 
     protected Role(Player player, RoleType identifier) {
         this.player = player;
@@ -77,6 +77,7 @@ public abstract class Role {
      * see {@link RoleAttributes RoleAttributes} for a description of the default attributes
      *
      * @param attribute The attribute you want to add
+     *
      * @see RoleAttribute
      * @see RoleAttributes
      */
@@ -90,9 +91,41 @@ public abstract class Role {
      * realization</p>
      *
      * @param role The role of the player who's trying to kill this player
+     *
      * @return Returns whether a player can kill this player
      */
     public boolean canGetKilled(Role role) {
         return true;
+    }
+
+    public Collection<RoleOption> getOptions() {
+        return options.values();
+    }
+
+    public void setOption(String key, Object value) {
+        options.put(key.toLowerCase(), new RoleOption(key, value));
+    }
+
+    public boolean hasOption(String key) {
+        return options.containsKey(key);
+    }
+
+    public RoleOption getOption(String key) {
+        return options.get(key.toLowerCase());
+    }
+
+    public void removeOption(String key) {
+        options.remove(key.toLowerCase());
+    }
+
+    public void clearOptions() {
+        options.clear();
+    }
+
+    public void addKiller(Role role) {
+        if (!hasOption(RoleOption.KILLED)) {
+            setOption(RoleOption.KILLED, new ArrayList<Role>());
+        }
+        getOption(RoleOption.KILLED).addToList(role);
     }
 }

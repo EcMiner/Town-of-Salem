@@ -1,16 +1,20 @@
 package me.ecminer.tos.role;
 
 import me.ecminer.tos.exceptions.InvalidRoleException;
+import me.ecminer.tos.role.ability.ActionHandler;
 import me.ecminer.tos.role.roles.Vigilante;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RoleManager {
 
     private Map<RoleType, Class<? extends Role>> registeredRoles = new HashMap<>();
+    private List<ActionHandler> actionHandlers = new ArrayList<>();
 
     public RoleManager() {
         loadDefaults();
@@ -49,6 +53,23 @@ public class RoleManager {
             throw new InvalidRoleException(roleClass);
         } catch (InvalidRoleException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void addActionHandler(ActionHandler actionHandler) {
+        if (!actionHandlers.contains(actionHandler)) {
+            if (actionHandlers.size() == 0) {
+                actionHandlers.add(actionHandler);
+            } else {
+                for (int i = 0; i < actionHandlers.size(); i++) {
+                    ActionHandler other = actionHandlers.get(i);
+                    if (actionHandler.getPriority() < other.getPriority()) {
+                        actionHandlers.add(i, actionHandler);
+                        return;
+                    }
+                }
+                actionHandlers.add(actionHandler);
+            }
         }
     }
 }

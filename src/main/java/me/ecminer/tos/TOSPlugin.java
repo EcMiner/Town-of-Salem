@@ -1,5 +1,6 @@
 package me.ecminer.tos;
 
+import me.ecminer.tos.listeners.GameListener;
 import me.ecminer.tos.role.RoleManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,5 +26,9 @@ public class TOSPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         instance = null;
+    }
+
+    private void registerEvents() {
+        getServer().getPluginManager().registerEvents(new GameListener(), this);
     }
 }
