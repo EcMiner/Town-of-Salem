@@ -7,7 +7,9 @@ import org.bukkit.entity.Player;
 public enum RoleTypes implements RoleType {
 
     VIGILANTE("Vigilante", ChatColor.GREEN, RoleCategories.KILLING, RoleTeam.TOWN),
-    JAILOR("Jailor", ChatColor.GREEN, RoleCategories.KILLING, RoleTeam.TOWN);
+    JAILOR("Jailor", ChatColor.GREEN, RoleCategories.KILLING, RoleTeam.TOWN),
+    VETERAN("Veteran", ChatColor.GREEN, RoleCategories.KILLING, RoleTeam.TOWN),
+    SERIAL_KILLER("Serial Killer", ChatColor.DARK_BLUE, RoleCategories.KILLING, RoleTeam.NEUTRAL);
 
     private final String name;
     private final ChatColor nameColor;

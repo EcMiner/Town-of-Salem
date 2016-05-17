@@ -2,6 +2,7 @@ package me.ecminer.tos.game;
 
 import me.ecminer.tos.lynch.Lynch;
 import me.ecminer.tos.role.Role;
+import me.ecminer.tos.role.RoleType;
 
 import java.util.HashMap;
 import java.util.List;

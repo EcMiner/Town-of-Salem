@@ -29,6 +29,10 @@ public enum RoleAttributes implements RoleAttribute {
      * Ignore night immunity means a role with {@link #NIGHT_IMMUNE night immunity} will not be protected by his night
      * immunity
      */
-    IGNORE_NIGHT_IMMUNE;
+    IGNORE_NIGHT_IMMUNE,
+    /**
+     * Unique means that a role with this attribute can only appear once in a game, like veteran
+     */
+    UNIQUE;
 
 }

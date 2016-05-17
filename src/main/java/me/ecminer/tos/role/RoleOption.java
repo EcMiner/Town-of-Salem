@@ -7,6 +7,7 @@ public class RoleOption {
     public static final String JAILED = "default.jailed";
     public static final String ROLE_BLOCKED = "default.role_blocked";
     public static final String KILLED = "default.killed";
+    public static final String VISITED = "default.visited";
 
     private final String identifier;
     private final Object obj;

@@ -132,9 +132,19 @@ public class RoleManager {
         for (int priority : priorities) {
             if (abilityPriorities.containsKey(priority)) {
                 for (Class<? extends Ability> ability : abilityPriorities.get(priority)) {
-                    if (abilityHandlers.containsKey(ability)) {
-                        for (Role role : game.getAlivePlayers()) {
-                            abilityHandlers.get(ability).handle(role);
+                    if (abilitySuperClass.isAssignableFrom(ability)) {
+                        if (abilityHandlers.containsKey(ability)) {
+                            AbilityHandler handler = abilityHandlers.get(ability);
+                            for (Role role : game.getAlivePlayers()) {
+                                if (!role.isDead()) {
+                                    handler.handle(role);
+                                }
+                            }
+                            for (Role role : game.getAlivePlayers()) {
+                                if (role.isKilled()) {
+                                    role.die();
+                                }
+                            }
                         }
                     }
                 }

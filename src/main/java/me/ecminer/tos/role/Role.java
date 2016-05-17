@@ -1,5 +1,7 @@
 package me.ecminer.tos.role;
 
+import me.ecminer.tos.role.goal.Goal;
+import me.ecminer.tos.role.target.TargetFilter;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -11,6 +13,10 @@ public abstract class Role {
     protected final RoleType identifier;
     protected boolean isDead;
     private final Map<String, RoleOption> options = new HashMap<>();
+    private boolean killed;
+    private TargetFilter nightTargetFilter;
+    private TargetFilter dayTargetFilter;
+    private Goal goal;
 
     protected Role(Player player, RoleType identifier) {
         this.player = player;
@@ -33,6 +39,9 @@ public abstract class Role {
     public final void die() {
         if (!isDead) {
             isDead = true;
+            if (player != null) {
+                // TODO Display effect
+            }
         }
     }
 
@@ -81,8 +90,16 @@ public abstract class Role {
      * @see RoleAttribute
      * @see RoleAttributes
      */
-    protected final void addAttribute(RoleAttribute attribute) {
+    public final void addAttribute(RoleAttribute attribute) {
         attributes.add(attribute);
+    }
+
+    public final void removeAttribute(RoleAttribute attribute) {
+        attributes.remove(attribute);
+    }
+
+    public final boolean hasAttribute(RoleAttribute attribute) {
+        return attributes.contains(attribute);
     }
 
     /**
@@ -122,10 +139,95 @@ public abstract class Role {
         options.clear();
     }
 
-    public void addKiller(Role role) {
-        if (!hasOption(RoleOption.KILLED)) {
-            setOption(RoleOption.KILLED, new ArrayList<Role>());
+    public boolean kill(Role killer) {
+        addVisit(killer);
+        if (!hasAttribute(RoleAttributes.NIGHT_IMMUNE) || killer.hasAttribute(RoleAttributes.IGNORE_NIGHT_IMMUNE)) {
+            if (!hasOption(RoleOption.KILLED)) {
+                setOption(RoleOption.KILLED, new ArrayList<Role>());
+            }
+            getOption(RoleOption.KILLED).addToList(killer);
+            return (killed = true);
         }
-        getOption(RoleOption.KILLED).addToList(role);
+        return false;
+    }
+
+    public void addVisit(Role visiter) {
+        if (!hasOption(RoleOption.VISITED)) {
+            setOption(RoleOption.VISITED, new ArrayList<Role>());
+        }
+        getOption(RoleOption.VISITED).addToList(visiter);
+    }
+
+    /**
+     * Returns whether the player is killed during a night
+     *
+     * @return Whether the player killed during the night
+     */
+    public boolean isKilled() {
+        return killed;
+    }
+
+    public TargetFilter getNightTargetFilter() {
+        return nightTargetFilter;
+    }
+
+    public void setNightTargetFilter(TargetFilter nightTargetFilter) {
+        this.nightTargetFilter = nightTargetFilter;
+    }
+
+    public TargetFilter getDayTargetFilter() {
+        return dayTargetFilter;
+    }
+
+    public void setDayTargetFilter(TargetFilter dayTargetFilter) {
+        this.dayTargetFilter = dayTargetFilter;
+    }
+
+    public boolean roleBlock(Role blocker) {
+        addVisit(blocker);
+        if (!hasAttribute(RoleAttributes.ROLE_BLOCK_IMMUNE)) {
+            if (!hasOption(RoleOption.ROLE_BLOCKED)) {
+                setOption(RoleOption.ROLE_BLOCKED, new ArrayList<Role>());
+            }
+            getOption(RoleOption.ROLE_BLOCKED).addToList(blocker);
+        }
+        return false;
+    }
+
+    public boolean isRoleBlocked() {
+        return hasOption(RoleOption.ROLE_BLOCKED);
+    }
+
+    public List<Role> getRoleBlockers() {
+        return hasOption(RoleOption.ROLE_BLOCKED) ? getOption(RoleOption.ROLE_BLOCKED)
+                .asList(Role.class) : new ArrayList<>();
+    }
+
+    /**
+     * Resets data that might have been added during the day or night, like killers, etc.
+     */
+    public void reset() {
+        killed = false;
+        clearOptions();
+    }
+
+    public final void leave() {
+        setDayTargetFilter(null);
+        setNightTargetFilter(null);
+        setGoal(null);
+        this.player = null;
+        options.clear();
+        onLeave();
+    }
+
+    public Goal getGoal() {
+        return goal;
+    }
+
+    public void setGoal(Goal goal) {
+        this.goal = goal;
+    }
+
+    public void onLeave() {
     }
 }
