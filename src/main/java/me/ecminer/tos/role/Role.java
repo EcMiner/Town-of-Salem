@@ -1,5 +1,6 @@
 package me.ecminer.tos.role;
 
+import me.ecminer.tos.game.Game;
 import me.ecminer.tos.role.goal.Goal;
 import me.ecminer.tos.role.target.TargetFilter;
 import org.bukkit.entity.Player;
@@ -9,17 +10,21 @@ import java.util.*;
 public abstract class Role {
 
     protected Player player;
+    protected final UUID playerId;
     protected final List<RoleAttribute> attributes;
     protected final RoleType identifier;
     protected boolean isDead;
+    protected final Game game;
     private final Map<String, RoleOption> options = new HashMap<>();
     private boolean killed;
     private TargetFilter nightTargetFilter;
     private TargetFilter dayTargetFilter;
     private Goal goal;
 
-    protected Role(Player player, RoleType identifier) {
+    protected Role(Player player, Game game, RoleType identifier) {
         this.player = player;
+        this.playerId = player.getUniqueId();
+        this.game = game;
         this.attributes = new ArrayList<>();
         this.identifier = identifier;
     }
@@ -79,6 +84,18 @@ public abstract class Role {
      */
     public final Player getPlayer() {
         return player;
+    }
+
+    public final String getName() {
+        return game.getName(playerId);
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public final UUID getPlayerId() {
+        return playerId;
     }
 
     /**
@@ -215,9 +232,9 @@ public abstract class Role {
         setDayTargetFilter(null);
         setNightTargetFilter(null);
         setGoal(null);
+        onLeave();
         this.player = null;
         options.clear();
-        onLeave();
     }
 
     public Goal getGoal() {
@@ -226,6 +243,9 @@ public abstract class Role {
 
     public void setGoal(Goal goal) {
         this.goal = goal;
+    }
+
+    public void onSelectTarget(Role target, boolean isDay) {
     }
 
     public void onLeave() {

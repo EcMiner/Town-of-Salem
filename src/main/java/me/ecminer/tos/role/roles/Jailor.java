@@ -1,5 +1,6 @@
 package me.ecminer.tos.role.roles;
 
+import me.ecminer.tos.game.Game;
 import me.ecminer.tos.role.Role;
 import me.ecminer.tos.role.RoleAttributes;
 import me.ecminer.tos.role.RoleTeam;
@@ -17,8 +18,8 @@ public class Jailor extends Role implements DayTargetPlayerAbility, NightTargetP
     private Role jailed;
     private int executions = 3;
 
-    protected Jailor(Player player) {
-        super(player, RoleTypes.JAILOR);
+    protected Jailor(Player player, Game game) {
+        super(player, game, RoleTypes.JAILOR);
         addAttribute(RoleAttributes.IGNORE_NIGHT_IMMUNE);
         setDayTargetFilter(new TargetAllButSelfFilter(this));
         setNightTargetFilter(new TargetFilter() {

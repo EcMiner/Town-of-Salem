@@ -1,6 +1,7 @@
 package me.ecminer.tos.role;
 
 import me.ecminer.tos.TOSPlugin;
+import me.ecminer.tos.game.Game;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -43,8 +44,8 @@ public enum RoleTypes implements RoleType {
         return team;
     }
 
-    public Role createRole(Player player) {
-        return TOSPlugin.getInstance().getRoleManager().createRole(this, player);
+    public Role createRole(Player player, Game game) {
+        return TOSPlugin.getInstance().getRoleManager().createRole(this, player, game);
     }
 
 }

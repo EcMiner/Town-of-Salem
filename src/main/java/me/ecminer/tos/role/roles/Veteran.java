@@ -1,5 +1,6 @@
 package me.ecminer.tos.role.roles;
 
+import me.ecminer.tos.game.Game;
 import me.ecminer.tos.role.Role;
 import me.ecminer.tos.role.RoleAttributes;
 import me.ecminer.tos.role.RoleTypes;
@@ -15,8 +16,8 @@ public class Veteran extends Role implements NightTargetPlayerAbility, VisitYouA
     private int alerts = 3;
     private boolean isOnAlert;
 
-    protected Veteran(Player player) {
-        super(player, RoleTypes.VETERAN);
+    protected Veteran(Player player, Game game) {
+        super(player, game, RoleTypes.VETERAN);
         addAttribute(RoleAttributes.ROLE_BLOCK_IMMUNE);
         addAttribute(RoleAttributes.CONTROL_IMMUNE);
         addAttribute(RoleAttributes.UNIQUE);

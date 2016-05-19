@@ -41,11 +41,11 @@ public class RoleManager {
         addAbilityHandler(new NightTargetPlayerHandler());
     }
 
-    public Role createRole(RoleType identifier, Player player) {
+    public Role createRole(RoleType identifier, Player player, Game game) {
         Class<? extends Role> roleClass = registeredRoles.get(identifier);
         if (roleClass != null) {
             try {
-                return roleClass.getConstructor(Player.class).newInstance(player);
+                return roleClass.getConstructor(Player.class, Game.class).newInstance(player, game);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -60,7 +60,8 @@ public class RoleManager {
     public void registerRole(RoleType identifier, Class<? extends Role> roleClass) {
         if (roleClass.getConstructors().length > 0) {
             for (Constructor<?> constructor : roleClass.getConstructors()) {
-                if (constructor.getParameterCount() == 1 && constructor.getParameters()[0].getType() == Player.class) {
+                if (constructor.getParameterCount() == 2 && (constructor.getParameters()[0].getType() == Player.class
+                        && constructor.getParameters()[1].getType() == Game.class)) {
                     registeredRoles.put(identifier, roleClass);
 
                     for (Class<?> iface : roleClass.getInterfaces()) {

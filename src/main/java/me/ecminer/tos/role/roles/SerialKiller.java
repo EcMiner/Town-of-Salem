@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 
 public class SerialKiller extends Role implements NightTargetPlayerAbility {
 
-    protected SerialKiller(Player player) {
-        super(player, RoleTypes.SERIAL_KILLER);
+    protected SerialKiller(Player player, Game game) {
+        super(player, game, RoleTypes.SERIAL_KILLER);
         addAttribute(RoleAttributes.NIGHT_IMMUNE);
         setGoal(new Goal(this) {
 
