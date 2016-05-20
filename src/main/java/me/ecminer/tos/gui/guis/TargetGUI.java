@@ -1,5 +1,6 @@
 package me.ecminer.tos.gui.guis;
 
+import me.ecminer.tos.TOSPlugin;
 import me.ecminer.tos.game.Game;
 import me.ecminer.tos.gui.GUI;
 import me.ecminer.tos.role.Role;
@@ -11,7 +12,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 public class TargetGUI extends GUI {
 
@@ -39,26 +39,33 @@ public class TargetGUI extends GUI {
         if (role.getPlayer() != null && role.getPlayer() == player && clickedItem != null) {
             if (clickedItem.getType() == Material.SKULL_ITEM) {
                 select(slot);
-                // TODO Trigger method in role
+                Role selected = getSelected();
+                if (selected != null) {
+                    TOSPlugin.getInstance().getTargetManager().setTarget(this.role, selected);
+                    this.role.onSelectTarget(selected);
+                }
             } else if (clickedItem.getType() == Material.STAINED_GLASS_PANE
                     && clickedItem.getData().getData() == DyeColor.LIGHT_BLUE.getData()) {
-                unselect();
-                // TODO Trigger method in role
+                Role selected = getSelected();
+                if (selected != null) {
+                    TOSPlugin.getInstance().getTargetManager().removeTarget(this.role);
+                    this.role.onUnSelectTarget(selected);
+                }
+                unSelect();
             }
         }
         return true;
     }
 
     private void select(int slot) {
-        unselect();
+        unSelect();
         this.selected = slot;
         gui.setItem(slot, ItemUtils.setDisplayName(glassPane(DyeColor.LIGHT_BLUE),
                 ChatColor.AQUA + (role.isOnline() ? role.getName() : "[" + role.getName() + "]")));
     }
 
-    private void unselect() {
+    private void unSelect() {
         if (selected >= 0) {
-            ItemStack sel = gui.getItem(selected);
             Role role = getSelected();
             if (role != null) {
                 gui.setItem(selected, ItemUtils.setDisplayName(playerHead(),

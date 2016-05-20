@@ -1,10 +1,12 @@
 package me.ecminer.tos;
 
+import me.ecminer.tos.configuration.Configuration;
 import me.ecminer.tos.game.GameManager;
 import me.ecminer.tos.gui.GUIManager;
 import me.ecminer.tos.listeners.GUIListener;
 import me.ecminer.tos.listeners.GameListener;
 import me.ecminer.tos.role.RoleManager;
+import me.ecminer.tos.role.target.TargetManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TOSPlugin extends JavaPlugin {
@@ -18,6 +20,8 @@ public class TOSPlugin extends JavaPlugin {
     private RoleManager roleManager = new RoleManager();
     private GUIManager guiManager = new GUIManager();
     private GameManager gameManager = new GameManager();
+    private TargetManager targetManager = new TargetManager();
+    private Configuration configuration = new Configuration();
 
     public RoleManager getRoleManager() {
         return roleManager != null ? roleManager : (roleManager = new RoleManager());
@@ -29,6 +33,14 @@ public class TOSPlugin extends JavaPlugin {
 
     public GameManager getGameManager() {
         return gameManager != null ? gameManager : (gameManager = new GameManager());
+    }
+
+    public TargetManager getTargetManager() {
+        return targetManager != null ? targetManager : (targetManager = new TargetManager());
+    }
+
+    public Configuration getConfiguration() {
+        return configuration != null ? configuration : (configuration = new Configuration());
     }
 
     @Override

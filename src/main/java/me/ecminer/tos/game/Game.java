@@ -14,13 +14,22 @@ public class Game {
     private Map<UUID, List<Lynch>> lynches = new HashMap<>();
     private Map<UUID, String> playerNames = new HashMap<>();
     private Map<String, Role> nameRoles = new HashMap<>();
+    private GamePhase gamePhase = GamePhase.GAME_BEGINNING;
 
     public List<Role> getAlivePlayers() {
         return null;
     }
 
     public boolean isDay() {
-        return true;
+        return !isNight();
+    }
+
+    public boolean isNight() {
+        return gamePhase == GamePhase.NIGHT;
+    }
+
+    public GamePhase getGamePhase() {
+        return gamePhase;
     }
 
     public Role getRole(Player player) {

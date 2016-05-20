@@ -245,7 +245,10 @@ public abstract class Role {
         this.goal = goal;
     }
 
-    public void onSelectTarget(Role target, boolean isDay) {
+    public void onSelectTarget(Role target) {
+    }
+
+    public void onUnSelectTarget(Role target) {
     }
 
     public void onLeave() {
